@@ -39,8 +39,9 @@ class chatDB:
                         CREATE TABLE Msgs(
                         sender varchar[15],
                         receiver varchar[15],
-                        timestamp varchar[15],
-                        read varchar[5]             
+                        time_stamp datetime,
+                        read varchar[3],
+                        primary key(sender, receiver, time_stamp))
                         """)
                     cur.execute("""
                         CREATE TABLE cookies(
@@ -48,6 +49,8 @@ class chatDB:
                             user varchar[15],
                             last_acc varchar[30])
                         """)
+                    
+                    
         
         pass
 
@@ -67,6 +70,7 @@ class chatDB:
         Background tasks: cookie cleaner
         """
         # You have to implement this method
+        pass
        
 
     def autoClear(self):
@@ -75,13 +79,13 @@ class chatDB:
         Should be called in self.start
         """
         # You have to implement this method
-        
+        pass
     def getOnlineUsers(self):
         """Get all online users
 
         Return: list of online users
         """
-        You have to implement this method
+        # You have to implement this method
         result=[]
         with self.con:
             cur = self.con.cursor()
@@ -169,7 +173,7 @@ class chatDB:
             'invalid_usr': failed. The user name is not valid.
             'invalid_': failed. The word is not valid.
         """
-        You have to implement this method
+        # You have to implement this method
         if len(usr) <3 or len(usr) > 10:
             return 'Invalid_usr'
         if len(wd) <=0:
@@ -194,7 +198,7 @@ class chatDB:
             'invalid_usr': login failed because of invalid user name.
             'invalid_wd': login failed because of wrong word.
         """
-        You have to implement this method
+        # You have to implement this method
         with self.con:
             cur = self.con.cursor()
             cur.execute("SELECT user, password from Users")
@@ -204,9 +208,9 @@ class chatDB:
                     if row[1] != wd:
                         return 'invalid_wd'
                     else:
-                        cur.execute(" UPDATE Users SET status = 'on' WHERE user = ?", [usr])
-                        
-        return [False, 'invalid_usr']
+                        cur.execute(" UPDATE Users SET status = 'on' WHERE user = ?", [usr])       
+                else
+                    return [False, 'invalid_usr']
         pass
     def logout(self, cookie):
         """Set owner of cookie as logged out
@@ -217,8 +221,8 @@ class chatDB:
             'invalid': log-out failed. The cookie does not exist.
         """
         # You have to implement this method
-        localtime = time.asctime( time.localtime(time.time()) )
-                        print localtime
+        # localtime = time.asctime( time.localtime(time.time()) )
+                        # print 'localtime'
         with self.con:
             cur = self.con.cursor()
             cur.execute("SELECT cookie, user from cookies WHERE cookie = ? ",[cookie])
@@ -351,4 +355,6 @@ if __name__ == "__main__":
 
     chatdb.start()
     ThreadedServer('', port).listen(50)
+
+
 
